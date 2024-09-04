@@ -1,0 +1,75 @@
+import fitz  # PyMuPDF##pip install PyPDF2## pip install pymupdf##pip install pymupdf python-docx
+import docx
+
+
+def extract_lines_with_positions_pdf(pdf_path):
+    try:
+        doc = fitz.open(pdf_path)
+        lines = []
+        for page_num in range(len(doc)):
+            page = doc.load_page(page_num)
+            blocks = page.get_text("blocks")
+            for block in blocks:
+                text = block[4]
+                y0 = block[1]
+                for line in text.split('\n'):
+                    if line.strip():  # Ignore empty lines
+                        lines.append((line, y0))
+        return lines
+    except Exception as e:
+        print(f"Error processing {pdf_path}: {e}")
+        return []
+
+
+def extract_lines_with_positions_docx(docx_path):
+    try:
+        doc = docx.Document(docx_path)
+        lines = []
+        y0 = 0
+        for para in doc.paragraphs:
+            if para.text.strip():  # Ignore empty paragraphs
+                lines.append((para.text.strip(), y0))
+            y0 += 1  # Simulate vertical position by incrementing for each paragraph
+        return lines
+    except Exception as e:
+        print(f"Error processing {docx_path}: {e}")
+        return []
+
+
+def extract_lines_with_positions(file_path):
+    if file_path.lower().endswith('.pdf'):
+        return extract_lines_with_positions_pdf(file_path)
+    elif file_path.lower().endswith('.docx'):
+        return extract_lines_with_positions_docx(file_path)
+    else:
+        print(f"Unsupported file format: {file_path}")
+        return []
+
+
+def compare_files(Source_path, compile_path):
+    lines1 = extract_lines_with_positions(Source_path)
+    lines2 = extract_lines_with_positions(compile_path)
+
+    max_lines = max(len(lines1), len(lines2))
+    differences = []
+
+    for i in range(max_lines):
+        line1, pos1 = lines1[i] if i < len(lines1) else ("", None)
+        line2, pos2 = lines2[i] if i < len(lines2) else ("", None)
+
+        if line1 != line2 or pos1 != pos2:
+            differences.append((i + 1, line1, pos1, line2, pos2))
+
+    if differences:
+        print("Differences found for both the file is:")
+        for diff in differences:
+            line_num, line1, pos1, line2, pos2 = diff
+            print(f"Line {line_num}:\nSource: {line1} (Position: {pos1})\nCompile: {line2} (Position: {pos2})\n")
+    else:
+        print("The files are identical.")
+
+
+# Example usage
+Source_path = r'C:\Users\pratap.panda\OneDrive - Infosys Limited\Desktop\Feedback Form Srihari.docx'  ##   Source File ,its support both PDF and Docx file
+compile_path = r'C:\Users\pratap.panda\OneDrive - Infosys Limited\Desktop\Feedback.docx'  # or r'C:\path\to\second.docx' ##Validation File its support both PDF and Docx file
+compare_files(Source_path, compile_path)
