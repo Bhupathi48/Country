@@ -1,0 +1,19 @@
+Bio Signature Confluence:
+**************************************
+https://confluence.jnj.com/display/JGNV/Biosignature-2.0
+
+you can find json schemas here, together with their automated deployment logic 
+*******************************************************************************
+https://sourcecode.jnj.com/projects/ASX-JGNV/repos/control_plane_schema/browse
+
+Pipeline configuration doc base is here, it's quite big, there is a lot of functionality: 
+*****************************************************************************************
+https://sourcecode.jnj.com/pages/ASX-NAGH/jpm_shared_lib/develop/browse/docs/#/
+
+they have specific support for robot: 
+*************************************
+https://sourcecode.jnj.com/pages/ASX-NAGH/jpm_shared_lib/develop/browse/docs/#/user-guide/utility-objects/robot/index
+
+Testers Confluence:
+**************************
+https://confluence.jnj.com/display/VADN/10.0+Tester+Starter+Kit
